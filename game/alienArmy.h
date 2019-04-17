@@ -3,99 +3,134 @@
 #include <vector>
 using namespace std;
 #include <SFML/Graphics.hpp>
+#include <list>
 using namespace sf;
 #include "alien.h"
 #include "gameUI.h"
 #include "ship.h"
+#include "textureManager.h"
 
 class alienArmy
 {
 private:
-	vector<alien*> alienHolder;
-	int alienExists[10] = { 1,1,1,1,1,1,1,1,1,1 };
+	list<alien*> alienHolder2;
 	bool alienArmyRight = true;
 	bool alienArmyLeft = false;
-	bool twiceAlienArmyRight = false;
+	bool dropAlienArmy = false;
 	int counter = 0;
+	
 
 public:
 
-	alienArmy()
+	alienArmy(textureManager* ptr)
 	{
 		int startingX = -20;
 		int startingY = 100;
+
 		for (int x = 1; x < 11; x++)
 		{
 			alien* tempAlien;
 
-			tempAlien = new alien(startingX + (x * 60), startingY);
-			alienHolder.push_back(tempAlien);
+			tempAlien = new alien(startingX + (x * 60), startingY, ptr);
+			alienHolder2.push_back(tempAlien);
 		}
-
-
+	}
+	int getSize()
+	{
+		return alienHolder2.size();
 	}
 
 	void draw(RenderWindow& win)
 	{
-		for (int y = 0; y < 10; y++)
-		{
-			if (alienExists[y] == 1)
-			{
-				win.draw(alienHolder[y]->getSprite());
-			}
+		list<alien*>::iterator iter;
 
+		for (iter = alienHolder2.begin(); iter != alienHolder2.end(); iter++)
+		{
+			win.draw((*iter)->getSprite());
 		}
+	}
+	void deleteAlien(int index)
+	{
+		list<alien*>::iterator iter;
+
+		iter = alienHolder2.begin();
+		advance(iter, index);
+		iter = alienHolder2.erase(iter);
+	}
+
+	Sprite& getSprite(int index)
+	{
+		list<alien*>::iterator iter;
+
+		iter = alienHolder2.begin();
+		advance(iter, index);
+		return (*iter)->getSprite();
 	}
 
 	void moveAlienArmy(RenderWindow& win)
 	{
-		Vector2f pos;
-		if (alienArmyRight)
+
+		if (alienHolder2.size() != 0)
 		{
-			for (int y = 0; y < 10; y++)
+			Vector2f pos;
+			if (alienArmyRight)
 			{
-				pos = alienHolder[y]->getSprite().getPosition();
-				pos.x += 5.0f;
-				alienHolder[y]->getSprite().setPosition(pos);
-			}
-			
-		}
+				list<alien*>::iterator iter;
 
-		if (alienHolder[9]->getSprite().getPosition().x >= win.getSize().x - 35)
-		{
-			alienArmyRight = false;
-			alienArmyLeft = true;
-			counter++;
+				for (iter = alienHolder2.begin(); iter != alienHolder2.end(); iter++)
+				{
+					pos = (*iter)->getSprite().getPosition();
+					pos.x += 5.0f;
+					(*iter)->getSprite().setPosition(pos);
+				}
 
-			if (counter == 4)
-			{
-				twiceAlienArmyRight = true;
-			}
-		}
-
-		if (alienArmyLeft)
-		{
-			for (int y = 0; y < 10; y++)
-			{
-				alienHolder[y]->getSprite().setPosition(alienHolder[y]->getSprite().getPosition().x - 5, alienHolder[y]->getSprite().getPosition().y);
-			}
-		}
-
-		if (alienHolder[0]->getSprite().getPosition().x <= 0)
-		{
-			alienArmyLeft = false;
-			alienArmyRight = true;
-		}
-
-		if (twiceAlienArmyRight)
-		{
-			for (int y = 0; y < 10; y++)
-			{
-				alienHolder[y]->getSprite().setPosition(alienHolder[y]->getSprite().getPosition().x, alienHolder[y]->getSprite().getPosition().y + 100);
 			}
 
-			twiceAlienArmyRight = false;
-			counter = 0;
+			list<alien*>::iterator it;
+			it = alienHolder2.begin();
+			advance(it, alienHolder2.size() - 1);
+			if ((*it)->getSprite().getPosition().x >= win.getSize().x - 35)
+			{
+				alienArmyRight = false;
+				alienArmyLeft = true;
+				counter++;
+
+				if (counter == 6)
+				{
+					dropAlienArmy = true;
+				}
+			}
+
+			if (alienArmyLeft)
+			{
+				list<alien*>::iterator iter;
+
+				for (iter = alienHolder2.begin(); iter != alienHolder2.end(); iter++)
+				{
+					(*iter)->getSprite().setPosition((*iter)->getSprite().getPosition().x - 5, (*iter)->getSprite().getPosition().y);
+				}
+			}
+
+			it = alienHolder2.begin();
+			advance(it, 0);
+			if ((*it)->getSprite().getPosition().x <= 0)
+			{
+				alienArmyLeft = false;
+				alienArmyRight = true;
+			}
+
+			if (dropAlienArmy)
+			{
+				list<alien*>::iterator iter;
+
+				for (iter = alienHolder2.begin(); iter != alienHolder2.end(); iter++)
+				{
+					(*iter)->getSprite().setPosition((*iter)->getSprite().getPosition().x, (*iter)->getSprite().getPosition().y + 100);
+				}
+
+				dropAlienArmy = false;
+				counter = 0;
+			}
 		}
 	}
 };

@@ -4,29 +4,28 @@
 using namespace std;
 #include <SFML/Graphics.hpp>
 using namespace sf;
+#include "textureManager.h"
 
 
 class ship
 {
 private:
-	Texture shipTexture;
 	Sprite ship1;
+	FloatRect shipBounds = ship1.getGlobalBounds();
 	float shipX = 400;
 	float shipY= 550;
 
 public:
 
-	ship()
+	ship(textureManager* ptr)
 	{		
 		ship1.setPosition(shipX, shipY);
-		if (!shipTexture.loadFromFile("ship.png"))
-		{
-			cout << "Unable to load ship texture!" << endl;
-			exit(EXIT_FAILURE);
+		ship1.setTexture(ptr->getShipTexture());
+	}
 
-		}
-
-		ship1.setTexture(shipTexture);
+	Sprite& getSprite()
+	{
+		return ship1;
 	}
 
 	void moveShip()

@@ -6,36 +6,25 @@ using namespace std;
 using namespace sf;
 #include "gameUI.h"
 #include "ship.h"
+#include "textureManager.h"
 
 
 class alien
 {
 private:
-	Texture alienTexture;
 	Sprite alienSprite;
-
+	FloatRect alienBounds = alienSprite.getGlobalBounds();
 
 public:
 
-	alien()
+	alien(textureManager* ptr)
 	{
-		if (!alienTexture.loadFromFile("enemy.png"))
-		{
-			cout << "Unable to load missile texture!" << endl;
-			exit(EXIT_FAILURE);
-		}
-		alienSprite.setTexture(alienTexture);
+		alienSprite.setTexture(ptr->getEnemyTexture());
 	};
 
-	alien(int x2, int y2)
+	alien(int x2, int y2, textureManager* ptr)
 	{
-		if (!alienTexture.loadFromFile("enemy.png"))
-		{
-			cout << "Unable to load missile texture!" << endl;
-			exit(EXIT_FAILURE);
-		}
-
-		alienSprite.setTexture(alienTexture);
+		alienSprite.setTexture(ptr->getEnemyTexture());
 		alienSprite.setPosition(x2, y2);
 	};
 

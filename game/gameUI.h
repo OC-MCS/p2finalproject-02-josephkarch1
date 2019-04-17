@@ -14,7 +14,7 @@ private:
 	RectangleShape topMenuBorder;
 	string lives = "3";
 	string level = "1";
-	string title = "Space Invaders!";
+	string title = "Kevin Durant is a Traitor!";
 
 public:
 	gameUI(int x)

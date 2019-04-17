@@ -4,13 +4,25 @@
 using namespace std;
 #include <SFML/Graphics.hpp>
 using namespace sf;
+#include "projectiles.h"
+#include "textureManager.h"
 
 class bombs
 {
 private:
-	Texture bombTexture;
 	Sprite bombSprite;
+	FloatRect bombBounds = bombSprite.getGlobalBounds();
 
 public:
 
+	bombs(int x, int y, textureManager* ptr)
+	{
+		bombSprite.setTexture(ptr->getMissileTexture());
+		bombSprite.setPosition(x, y);
+	}
+
+	Sprite& getSprite()
+	{
+		return bombSprite;
+	}
 };

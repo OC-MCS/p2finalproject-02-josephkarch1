@@ -10,6 +10,10 @@
 #include "alien.h"
 #include "ship.h"
 #include "alienArmy.h"
+#include "projectiles.h"
+#include "bombs.h"
+#include "missiles.h"
+#include "textureManager.h"
 
 
 using namespace std;
@@ -28,11 +32,23 @@ int main()
 	// variables
 	int timer = 0;
 
+	// Load up the textures and set up the pointer to textures
+	textureManager gameTextureManager;
+	textureManager* ptrGameTextureManager;
+	ptrGameTextureManager = &gameTextureManager;
+
 	// create the classes to control the different aspects of the program
 	gameUI controlGameUI(0);
-	ship gameShip;
-	alienArmy gameAlienArmy;
+	ship gameShip(ptrGameTextureManager);
+	alienArmy gameAlienArmy(ptrGameTextureManager);
+	projectiles gameProjectiles(&gameTextureManager);
+	
+	// create pointer to the ship
+	ship* ptrGameShip;
+	ptrGameShip = &gameShip;
 
+
+	// Start the Animation Loop
 	while (window.isOpen())
 	{
 
@@ -50,32 +66,41 @@ int main()
 			{
 				if (event.key.code == Keyboard::Space)
 				{
-					// handle space bar
+					gameProjectiles.spaceBarDown(ptrGameShip);
 				}
 
 			}
 		}
 
 
-
+		// Draw the game's UI
 		controlGameUI.draw(window);
 
+		// Draw the Ship
 		gameShip.moveShip();
 		gameShip.checkBounds(window);
-		// draw the ship on top of background 
-		// (the ship from previous frame was erased when we drew background)
 		gameShip.draw(window);
 
+		// Draw the Alien
 		gameAlienArmy.moveAlienArmy(window);
 		gameAlienArmy.draw(window);
-		// end the current frame; this makes everything that we have 
-		// already "drawn" actually show up on the screen
+
+		// Draw Projectiles
+		gameProjectiles.missileShoot();
+		gameProjectiles.missileOutOfBounds();
+		gameProjectiles.bombFire(&gameAlienArmy, timer);
+		gameProjectiles.bombDrop();
+		gameProjectiles.hitCheck(&gameShip, &gameAlienArmy);
+
+
+
+
+		gameProjectiles.draw(window);
+		
+
+
 		window.display();
 
-		// At this point the frame we have built is now visible on screen.
-		// Now control will go back to the top of the animation loop
-		// to build the next frame. Since we begin by drawing the
-		// background, each frame is rebuilt from scratch.
 
 		timer++;
 
