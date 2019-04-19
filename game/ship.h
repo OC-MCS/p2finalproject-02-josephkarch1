@@ -13,7 +13,7 @@ private:
 	Sprite ship1;
 	FloatRect shipBounds = ship1.getGlobalBounds();
 	float shipX = 400;
-	float shipY= 550;
+	float shipY= 500;
 
 public:
 
@@ -28,9 +28,14 @@ public:
 		return ship1;
 	}
 
+	void resetShipToStart()
+	{
+		ship1.setPosition(shipX, shipY);
+	}
+
 	void moveShip()
 	{
-		const float DISTANCE = 5.0f;
+		const float DISTANCE = 10.0f;
 
 		if (Keyboard::isKeyPressed(Keyboard::Left))
 		{

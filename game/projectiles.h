@@ -25,7 +25,7 @@ public:
 		holderPointer = ptr;
 	}
 
-	void hitCheck(ship* ptr, alienArmy* army1)
+	void hitCheck(ship* ship1, alienArmy* army1, gameUI* gameControl)
 	{
 		int index;
 		list<missiles*>::iterator iter;
@@ -40,6 +40,8 @@ public:
 					iter = misssilesHolder.erase(iter);
 					army1->deleteAlien(k);
 					hit = true;
+					gameControl->setScore();
+
 				}
 			}
 			if (!hit)
@@ -51,16 +53,23 @@ public:
 		list<bombs*>::iterator iter2;
 
 		for (iter2 = bombsHolder.begin(); iter2 != bombsHolder.end(); iter2++)
-		{
-			
+		{	
+			if ((*iter2)->getSprite().getGlobalBounds().intersects(ship1->getSprite().getGlobalBounds()))
+			{
+				army1->refillAlienArmyLevel1();
+				ship1->resetShipToStart();
+				gameControl->setLives();
+			}
 		}
 	}
+
+
 	void bombFire(alienArmy* army1, int timer1)
 	{
 		int tempX;
 		int tempY;
 		int randomAlienIndex;
-		srand(time(NULL));
+		srand(time(0));
 		randomAlienIndex = rand() % army1->getSize();
 
 		if (timer1 % 30 == 0)
@@ -123,6 +132,23 @@ public:
 			{
 				iter++;
 			}
+		}
+	}
+
+	void clearAllProjectiles()
+	{
+		list<bombs*>::iterator iter;
+
+		for (iter = bombsHolder.begin(); iter != bombsHolder.end(); )
+		{
+				iter = bombsHolder.erase(iter);
+		}
+
+		list<missiles*>::iterator iter2;
+
+		for (iter2 = misssilesHolder.begin(); iter2 != misssilesHolder.end();)
+		{
+				iter2 = misssilesHolder.erase(iter2);
 		}
 	}
 

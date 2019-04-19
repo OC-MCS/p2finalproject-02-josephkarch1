@@ -17,7 +17,7 @@ public:
 
 	bombs(int x, int y, textureManager* ptr)
 	{
-		bombSprite.setTexture(ptr->getMissileTexture());
+		bombSprite.setTexture(ptr->getBombTexture());
 		bombSprite.setPosition(x, y);
 	}
 
