@@ -9,21 +9,22 @@ using namespace sf;
 class textureManager
 {
 private:
-	Texture shipTexture;
-	Texture starsTexture;
-	Texture missileTexture;
-	Texture enemyTexture;
-	Texture enemyTexture2;
-	Texture bombTexture;
-	RectangleShape startButton;
-	RectangleShape winButton;
-	RectangleShape loseButton;
+	Texture shipTexture;					// holds the texture for the ship / russell westbrook
+	Texture starsTexture;					// holds the texture for the stars background / OKC thunder home court
+	Texture missileTexture;					// holds the texture for the missile / cupcake
+	Texture enemyTexture;					// holds the texture for the enemy / level 1 bad guy, kevin durant
+	Texture enemyTexture2;					// holds the texture for the enemy / level 2 bad guy, angry kevin durant
+	Texture bombTexture;					// holds the texture for the enemy bombs / kevin durant attack weapon, the NBA trophy
+	RectangleShape startButton;				// shape of the start button, click and start the game
+	RectangleShape winButton;				// shape of the win button, click and it restarts the game
+	RectangleShape loseButton;				// shape of the lose button, click and it restarts the game
 	
 	
 public:
 
 	textureManager()
 	{
+		// load all the textures that will be used in the program
 		if (!shipTexture.loadFromFile("ship.png"))
 		{
 			cout << "Unable to load ship texture!" << endl;
@@ -60,6 +61,7 @@ public:
 			exit(EXIT_FAILURE);
 		}
 
+		// load all the buttons that will be used in the game
 		Vector2f sqPos1(300, 300);
 		startButton.setPosition(sqPos1);
 		startButton.setOutlineColor(Color::White);
@@ -81,6 +83,7 @@ public:
 		loseButton.setSize(Vector2f(200, 100));
 		loseButton.setFillColor(Color::White);
 
+		// load the fonts we will need
 		Font font;
 		if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf"))
 		{
@@ -89,6 +92,11 @@ public:
 
 	}
 
+//================================================================================
+// drawStartButton: draws the start button
+// parameters: RenderWindow& win
+// return type: void
+//================================================================================
 	void drawStartButton(RenderWindow& win)
 	{
 		win.draw(startButton);
@@ -105,6 +113,11 @@ public:
 		win.draw(startButtonTitle);
 	}
 
+//================================================================================
+// drawWinButton: draws the win button
+// parameters: RenderWindow& win
+// return type: void
+//================================================================================
 	void drawWinButton(RenderWindow& win)
 	{
 		win.draw(winButton);
@@ -121,6 +134,11 @@ public:
 		win.draw(winButtonTitle);
 	}
 
+//================================================================================
+// drawLoseButton: draws the lose button
+// parameters: RenderWindow& win
+// return type: void
+//================================================================================
 	void drawLoseButton(RenderWindow& win)
 	{
 		win.draw(loseButton);
@@ -136,6 +154,9 @@ public:
 		loseButtonTitle.setFillColor(sf::Color::Blue);
 		win.draw(loseButtonTitle);
 	}
+
+
+	// the following getter functions allow other classes to pull the textures from the texture manager to be used elsewhere
 
 	RectangleShape &getStartButton()
 	{

@@ -13,12 +13,12 @@ using namespace sf;
 class alienArmy
 {
 private:
-	list<alien*> alienHolder2;
-	textureManager* textureManagerHolder;
-	bool alienArmyRight = true;
-	bool alienArmyLeft = false;
-	bool dropAlienArmy = false;
-	int counter = 0;
+	list<alien*> alienHolder2;				// list which holds all the aliens
+	textureManager* textureManagerHolder;	// pointer to the texture manager so the class can access textures
+	bool alienArmyRight = true;				// bool which controls if the alien army is moving right
+	bool alienArmyLeft = false;				// bool which controls if the alien army is moving left
+	bool dropAlienArmy = false;				// bool which controls if the army needs to drop down a level
+	int counter = 0;						// counter
 	
 
 public:
@@ -38,36 +38,53 @@ public:
 			alienHolder2.push_back(tempAlien);
 		}
 	}
+
+//================================================================================
+// getSize: returns the size of the alien holder list
+// parameters: N/A
+// return type: int
+//================================================================================
 	int getSize()
 	{
 		return alienHolder2.size();
 	}
 
+//================================================================================
+// heightCheck: checks to make sure that the alien army didn't decend past a certain point.
+// if the army goes too low, life is lost.
+// parameters: ship* ship1, alienArmy* army1, gameUI* gameControl
+// return type: void
+//================================================================================
 	void heightCheck(ship* ship1, alienArmy* army1, gameUI* gameControl)
 	{
+		// go through the list of aliens, check if any are below a certain line
 		list<alien*>::iterator iter;
 
-		for (iter = alienHolder2.begin(); iter != alienHolder2.end(); iter++)
+		bool tooLow = false;
+
+		for (iter = alienHolder2.begin(); !tooLow && iter != alienHolder2.end();)
 		{
-			if ((*iter)->getSprite().getPosition().y >= 475)
+			
+			if ((*iter)->getSprite().getPosition().y >= 375)
 			{
 				army1->refillAlienArmyLevel1();
 				ship1->resetShipToStart();
 				gameControl->setLives();
+				tooLow = true;
+			}
+
+			else
+			{
+				iter++;
 			}
 		}
 	}
 
-	void restPosition()
-	{
-		int startingX = -20;
-		int startingY = 100;
-
-		list<alien*>::iterator iter;
-
-
-	}
-
+//================================================================================
+// draw: draws the list of aliens
+// parameters: RenderWindow& win
+// return type: void
+//================================================================================
 	void draw(RenderWindow& win)
 	{
 		list<alien*>::iterator iter;
@@ -78,16 +95,41 @@ public:
 		}
 	}
 
-	void draw2(RenderWindow& win)
+//================================================================================
+// setSpriteA: changes the default alien sprite to the level one sprite
+// parameters: N/A
+// return type: void
+//================================================================================
+	void setSpriteA()
 	{
 		list<alien*>::iterator iter;
 
 		for (iter = alienHolder2.begin(); iter != alienHolder2.end(); iter++)
 		{
-			win.draw((*iter)->getSprite2());
+			(*iter)->setSpriteA();
 		}
 	}
 
+//================================================================================
+// setSpriteB: changes the default alien sprite to the level two sprite
+// parameters: N/A
+// return type: void
+//================================================================================
+	void setSpriteB()
+	{
+		list<alien*>::iterator iter;
+
+		for (iter = alienHolder2.begin(); iter != alienHolder2.end(); iter++)
+		{
+			(*iter)->setSpriteB();
+		}
+	}
+
+//================================================================================
+// deleteAlien: deletes an alien of a particular index on the list
+// parameters: int index
+// return type: void
+//================================================================================
 	void deleteAlien(int index)
 	{
 		list<alien*>::iterator iter;
@@ -97,6 +139,11 @@ public:
 		iter = alienHolder2.erase(iter);
 	}
 
+//================================================================================
+// getSprite: gets the address to a sprite of a particular index from the list
+// parameters: int index
+// return type: Sprite&
+//================================================================================
 	Sprite& getSprite(int index)
 	{
 		list<alien*>::iterator iter;
@@ -106,15 +153,12 @@ public:
 		return (*iter)->getSprite();
 	}
 
-	Sprite& getSprite2(int index)
-	{
-		list<alien*>::iterator iter;
-
-		iter = alienHolder2.begin();
-		advance(iter, index);
-		return (*iter)->getSprite2();
-	}
-
+//================================================================================
+// refillAlienArmyLevel1: refills the list of aliens with 10 new aliens.  In the process 
+// deletes any old aliens on the list
+// parameters: n/a
+// return type: void
+//================================================================================
 	void refillAlienArmyLevel1()
 	{
 		// delete everything in the old list
@@ -137,13 +181,20 @@ public:
 			alienHolder2.push_back(tempAlien);
 		}
 	};
-
+//================================================================================
+// moveAlienArmy: goes through the loop / list and moves each alien in the list. 
+// causes the entire line of aliens to move back and forth twice, and then drop down
+// parameters: RenderWindow& win
+// return type: void
+//================================================================================
 	void moveAlienArmy(RenderWindow& win)
 	{
 
 		if (alienHolder2.size() != 0)
 		{
 			Vector2f pos;
+
+			// moves the alien army right
 			if (alienArmyRight)
 			{
 				list<alien*>::iterator iter;
@@ -172,6 +223,7 @@ public:
 				}
 			}
 
+			// moves the alien army left
 			if (alienArmyLeft)
 			{
 				list<alien*>::iterator iter;
@@ -190,6 +242,7 @@ public:
 				alienArmyRight = true;
 			}
 
+			// drops the alien army
 			if (dropAlienArmy)
 			{
 				list<alien*>::iterator iter;

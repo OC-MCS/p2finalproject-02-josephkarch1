@@ -12,34 +12,56 @@ using namespace sf;
 class alien
 {
 private:
-	Sprite alienSprite;
-	Sprite alienSprite2;
-	Sprite returnSprite;
-	FloatRect alienBounds = alienSprite.getGlobalBounds();
+
+	Sprite returnSprite;											//the base sprite for the aliens
+	FloatRect alienBounds = returnSprite.getGlobalBounds();			// holds the boundary coordinates of the alien sprites
+	textureManager* pointerHolder;									// poiter to hold address to texture manager
+	int xValue;														// holds the x default starting values of the alien. later reference point for loops
+	int yValue;														// holds the y default starting values of the alien. later reference point for loops
 
 public:
 
 	alien(textureManager* ptr)
 	{
-		alienSprite.setTexture(ptr->getEnemyTexture());
-		alienSprite2.setTexture(ptr->getEnemyTexture2());
+		pointerHolder = ptr;
 	};
 
 	alien(int x2, int y2, textureManager* ptr)
 	{
-		alienSprite.setTexture(ptr->getEnemyTexture());
-		alienSprite2.setTexture(ptr->getEnemyTexture2());
-		alienSprite.setPosition(x2, y2);
+		// set the default x and y coordinate position for the alien
+		returnSprite.setPosition(x2, y2);
+		returnSprite.setPosition(x2, y2);
+		pointerHolder = ptr;
 	};
 
+//================================================================================
+// getSprite: getter for the address to the alien sprite
+// parameters: N/A
+// return type: alien sprite address
+//================================================================================
 	Sprite& getSprite()
 	{
-		return alienSprite;
+		return returnSprite;
 	}
 
-	Sprite& getSprite2()
+//================================================================================
+// setSpriteA: sets the texture of the sprte for level 1
+// parameters: N/A
+// return type: N/A
+//================================================================================
+	void setSpriteA()
 	{
-		return alienSprite2;
+		returnSprite.setTexture(pointerHolder->getEnemyTexture());
+	}
+
+//================================================================================
+// setSpriteB: sets the texture of the sprte for level 2
+// parameters: N/A
+// return type: N/A
+//================================================================================
+	void setSpriteB()
+	{
+		returnSprite.setTexture(pointerHolder->getEnemyTexture2());
 	}
 
 };

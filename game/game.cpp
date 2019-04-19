@@ -19,21 +19,22 @@
 using namespace std;
 using namespace sf; 
 
-void handleMouseUp(Vector2f mousePos, enum gameControl1);
 
 int main()
 {
+	// Set size of window
 	const int WINDOW_WIDTH = 800;
 	const int WINDOW_HEIGHT = 600;
 
 	RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Kevin Durant is a Traitor!");
+
 	// Limit the framerate to 60 frames per second
 	window.setFramerateLimit(60);
 
-	// variables
+	// start timer
 	int timer = 0;
 
-	// control game states with bool
+	// control game states with enum
 	enum gameControl
 	{
 		start, level1, level2, win, lose
@@ -61,6 +62,7 @@ int main()
 	// Start the Animation Loop
 	while (window.isOpen())
 	{
+		// needed to handle mouse and keyboard button clicks
 		Event event;
 		Vector2f mousePos;
 
@@ -72,6 +74,7 @@ int main()
 				window.close();
 			}
 
+			// handles pressing the spacebar
 			else if (event.type == Event::KeyPressed)
 			{
 				if (event.key.code == Keyboard::Space)
@@ -81,6 +84,7 @@ int main()
 
 			}
 
+			// handles the mouse clicks for buttons
 			else if (event.type == Event::MouseButtonReleased && (gameControl1 == start || gameControl1 == win || gameControl1 == lose))
 			{
 
@@ -142,6 +146,7 @@ int main()
 			gameShip.draw(window);
 
 			// Draw the Alien
+			gameAlienArmy.setSpriteA();
 			gameAlienArmy.moveAlienArmy(window);
 			gameAlienArmy.draw(window);
 
@@ -155,23 +160,30 @@ int main()
 			gameProjectiles.hitCheck(&gameShip, &gameAlienArmy, &controlGameUI);
 			gameAlienArmy.heightCheck(&gameShip, &gameAlienArmy, &controlGameUI);
 
+			// Draw all projectiles
 			gameProjectiles.draw(window);
 
+			// display all the objects which were previoiusly drawn
 			window.display();
 
+			// if the alienArmy size is zero, change to level 2
 			if (gameAlienArmy.getSize() == 0)
 			{
 				gameControl1 = level2;
+				
 				gameAlienArmy.refillAlienArmyLevel1();
+				gameAlienArmy.setSpriteB();
 				gameProjectiles.clearAllProjectiles();
 				controlGameUI.setLevel(2);
 			}
 
+			// if the number of lives drops below zero, end the game
 			if (controlGameUI.getLives() == -1)
 			{
 				gameControl1 = lose;
 				controlGameUI.resetUIVariables();
 				gameProjectiles.clearAllProjectiles();
+				controlGameUI.setLevel(1);
 			}
 		}
 		
@@ -184,8 +196,9 @@ int main()
 			gameShip.draw(window);
 
 			// Draw the Alien
+			gameAlienArmy.setSpriteB();
 			gameAlienArmy.moveAlienArmy(window);
-			gameAlienArmy.draw2(window);
+			gameAlienArmy.draw(window);
 
 			// Draw Projectiles
 			gameProjectiles.missileShoot();
@@ -197,24 +210,32 @@ int main()
 			gameProjectiles.hitCheck(&gameShip, &gameAlienArmy, &controlGameUI);
 			gameAlienArmy.heightCheck(&gameShip, &gameAlienArmy, &controlGameUI);
 
+			// draw all projectiles
 			gameProjectiles.draw(window);
-
+			
+			// display all the objects that were "drawn" on the window
 			window.display();
 
+			// if the AlienArmy size is equal to zero, then end the game
 			if (gameAlienArmy.getSize() == 0)
 			{
 				gameControl1 = win;
+				
 				gameAlienArmy.refillAlienArmyLevel1();
+				gameAlienArmy.setSpriteA();
 				gameProjectiles.clearAllProjectiles();
 				controlGameUI.setLevel(1);
 
 			}
 
+			// if the number of lives drops below zero, end end the game
 			if (controlGameUI.getLives() == -1)
 			{
 				gameControl1 = lose;
+				gameAlienArmy.setSpriteA();
 				controlGameUI.resetUIVariables();
 				gameProjectiles.clearAllProjectiles();
+				controlGameUI.setLevel(1);
 			}
 		}
 		timer++;

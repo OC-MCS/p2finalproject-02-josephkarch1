@@ -14,9 +14,9 @@ using namespace sf;
 class projectiles
 {
 private:
-	list<bombs*> bombsHolder;
-	list<missiles*> misssilesHolder;
-	textureManager* holderPointer;
+	list<bombs*> bombsHolder;				// linked list which holds all the bombs
+	list<missiles*> misssilesHolder;		// linked list which holds all the missiles
+	textureManager* holderPointer;			// holder pointer. holds the address of the texture manager so you can get access to the textures
 
 public:
 
@@ -25,8 +25,16 @@ public:
 		holderPointer = ptr;
 	}
 
+//================================================================================
+// hitCheck: takes pointers to the alien army, ship and GameUI. It checks to see if
+// the ship or alien army collides with a missile or bomb
+// parameters: ship* ship1, alienArmy* army1, gameUI* gameControl
+// return type: void
+//================================================================================
 	void hitCheck(ship* ship1, alienArmy* army1, gameUI* gameControl)
 	{
+
+		// check to see if the missiles intersect any of the aliens
 		int index;
 		list<missiles*>::iterator iter;
 
@@ -50,6 +58,8 @@ public:
 			}
 		}
 
+
+		// check to see if the bombs intersect with the ship
 		list<bombs*>::iterator iter2;
 
 		for (iter2 = bombsHolder.begin(); iter2 != bombsHolder.end(); iter2++)
@@ -63,7 +73,12 @@ public:
 		}
 	}
 
-
+//================================================================================
+// bombFire: takes pointers to the alien army, and creates a new bomb in front of 
+// a random alien. creates a new bomb every 1/2 second
+// parameters: alienArmy* army1, int timer1
+// return type: void
+//================================================================================
 	void bombFire(alienArmy* army1, int timer1)
 	{
 		int tempX;
@@ -81,6 +96,11 @@ public:
 		}
 	}
 
+//================================================================================
+// bombDrop: goes through the loop and moves each bomb during the animation frame
+// parameters: N/A
+// return type: void
+//================================================================================
 	void bombDrop()
 	{
 		list<bombs*>::iterator iter;
@@ -91,6 +111,11 @@ public:
 		}
 	}
 
+//================================================================================
+// missileShoot: goes through the loop and moves each missile during the animation frame
+// parameters: N/A
+// return type: void
+//================================================================================
 	void missileShoot()
 	{
 		list<missiles*>::iterator iter;
@@ -101,6 +126,12 @@ public:
 		}
 	}
 
+//================================================================================
+// bombOutOfBounds: goes through the loop and checks to see if the bombs are outside the game window
+// if a bomb is outside, it deletes it
+// parameters: N/A
+// return type: void
+//================================================================================
 	void bombOutOfBounds()
 	{
 		list<bombs*>::iterator iter;
@@ -118,6 +149,12 @@ public:
 		}
 	}
 
+//================================================================================
+// missileOutOfBounds: goes through the loop and checks to see if the missiles is outside the game window
+// if a missile is outside, it deletes it
+// parameters: N/A
+// return type: void
+//================================================================================
 	void missileOutOfBounds()
 	{
 		list<missiles*>::iterator iter;
@@ -135,6 +172,12 @@ public:
 		}
 	}
 
+//================================================================================
+// clearAllProjectiles: goes through the loop and deletes all projectiles. It does this for both
+// the bomb loop and the missile loop
+// parameters: N/A
+// return type: void
+//================================================================================
 	void clearAllProjectiles()
 	{
 		list<bombs*>::iterator iter;
@@ -152,6 +195,12 @@ public:
 		}
 	}
 
+//================================================================================
+// spaceBarDown: handles the spacebar down event.  If the spacebar is down it makes a new
+// missile and it puts the missile in front of the ship
+// parameters: ship* ptr
+// return type: void
+//================================================================================
 	void spaceBarDown(ship* ptr)
 	{
 		missiles* tempMissile;
@@ -160,6 +209,12 @@ public:
 		misssilesHolder.push_back(tempMissile);
 	}
 
+//================================================================================
+// draw: draws all the projectiles.  It goes through both the bomb and the missile loops
+// and it draws all the projectiles
+// parameters: RenderWindow& win
+// return type: void
+//================================================================================
 	void draw(RenderWindow& win)
 	{
 		list<missiles*>::iterator iter;

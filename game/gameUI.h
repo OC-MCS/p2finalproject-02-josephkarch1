@@ -8,19 +8,21 @@ using namespace sf;
 
 void die(string msg);
 
+
+
 class gameUI
 {
 private:
-	RectangleShape outerBorder;
-	RectangleShape topMenuBorder;
-	string lives = "3";
-	string level = "1";
-	string title = "Kevin Durant is a Traitor!";
-	string score = "0";
+	RectangleShape outerBorder;						// makes the outer border of the entire game / UI for the game
+	RectangleShape topMenuBorder;					// makes the top information bar
+	string lives = "3";								// a string which represents the number of lives. used for outputting to info bar
+	string level = "1";								// a string which represents the level. used for output to info bar
+	string title = "Kevin Durant is a Traitor!";	// a string which goes on the info bar
+	string score = "0";								// a string which represents the score, or number of aliens killed. used for outputting to the info bar
 
-	int scoreInt = 0;
-	int livesInt = 3; 
-	int levelInt = 1;
+	int scoreInt = 0;								// an int which represents the score. used to do math on the score value then convert to string
+	int livesInt = 3;								// an int which represents the number of lives. used to do math on the lives number then covert to string
+	int levelInt = 1;								// an int which represents the level number. It is used to do math on the level number and then is converted to a string
 
 
 
@@ -64,7 +66,7 @@ public:
 		topMenuBorder.setFillColor(Color::White);
 		win.draw(topMenuBorder);
 
-		// fill information on the top bar
+		// Draw the fill information on the top  info bar of the UI
 		Font font;
 		if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf"))
 			die("couldn't load font");
@@ -105,11 +107,21 @@ public:
 		win.draw(title7);
 	}
 
+//================================================================================
+// getLives: getter function which returns the number of lives as an int
+// parameters: N/A
+// return type: int
+//================================================================================
 	int getLives()
 	{
 		return livesInt;
 	}
 
+//================================================================================
+// setLives: setter for the lives string and int variables
+// parameters: N/A
+// return type: void
+//================================================================================
 	void setLives()
 	{
 		string tempString;
@@ -120,6 +132,11 @@ public:
 		lives = tempString;
 	}
 
+//================================================================================
+// setScore: setter for the score string and int variables
+// parameters: N/A
+// return type: void
+//================================================================================
 	void setScore()
 	{
 		string tempString;
@@ -130,6 +147,11 @@ public:
 		score = tempString;
 	}
 
+//================================================================================
+// setLevel: setter for the lvel string and int variables
+// parameters: int
+// return type: void
+//================================================================================
 	void setLevel(int int1)
 	{
 		string tempString;
@@ -139,6 +161,11 @@ public:
 		level = tempString;
 	}
 
+//================================================================================
+// resetUIVariables: resets the score, lives and level variablesi n the UI
+// parameters: none
+// return type: void
+//================================================================================
 	void resetUIVariables()
 	{
 		score = "0";
